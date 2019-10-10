@@ -1,0 +1,5 @@
+name: flask postgres deployment
+version: 0.0.1
+description: python flask with postgresql deployment
+maintainers:
+  - name: Anas Abdullah
