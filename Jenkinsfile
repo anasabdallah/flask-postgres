@@ -10,15 +10,23 @@ pipeline {
             gcloud config set project python-app-255507 && \
             gcloud container clusters get-credentials flask-cluster && \
             kubectl get pods
-            """
+          """
         }
 			}
 		}
     stage('build') {
-      steps {
-        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-          def app = docker.build("anasabdullah/python-app:0.0.1", '.').push()
+      agent {
+        docker {
+          image 'anasabdullah/python-app:0.0.1'
+          label 'anasabdullah/python-app:0.0.1'
+          registryUrl 'https://index.docker.io/v1/'
+          registryCredentialsId 'dockerhub'
         }
+      } 
+      steps {
+	      sh """
+          docker build -t anasabdullah/python-app:0.0.1 .
+        """
       }
     }
   }
