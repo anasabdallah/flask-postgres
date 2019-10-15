@@ -1,16 +1,23 @@
 pipeline {
   agent any 
   stages {
-    stage('clean') {
-      steps {
-        sh 'ls -la'
-				cleanWs()
-      }
-    }
 	  stage('prebuild') {
 			steps {
-				sh 'ls -la'
+				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
+          sh """
+            gcloud auth activate-service-account --key-file $jenkinsFlask && \
+            gcloud config set compute/zone us-east1-b && \
+            gcloud config set project python-app-255507 && \
+            gcloud container clusters get-credentials flask-cluster && \
+            kubectl get pods
+            """
+        }
 			}
 		}
+  }
+  post { 
+    always { 
+      cleanWs()
+    }
   }
 }
