@@ -23,7 +23,7 @@ node {
   stage('deploy') {
     sh """
        helm delete --purge flask-release && \
-       sleep 10 && \
+       sleep 20 && \
        helm install kubernetes/ --name flask-release
        """
   }
