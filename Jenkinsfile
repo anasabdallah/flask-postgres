@@ -21,7 +21,6 @@ node {
     }
   }
   stage('deploy') {
-    when { branch 'master' }
     sh """
        helm delete --purge flask-release && \
        sleep 30 && \
