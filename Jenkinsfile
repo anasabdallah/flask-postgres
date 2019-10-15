@@ -9,7 +9,8 @@ node {
       sh """
          gcloud auth activate-service-account --key-file $jenkinsFlask && \
          gcloud config set compute/zone us-east1-b && \
-         gcloud container clusters get-credentials flask-cluster
+         // gcloud container clusters get-credentials flask-cluster
+         kubectl get pods
          """
     }
   }
