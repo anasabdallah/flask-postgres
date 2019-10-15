@@ -6,5 +6,10 @@ pipeline {
 				cleanWs()
             }
         }
+		stage('prebuild') {
+			steps {
+				sh 'ls -la'
+			}
+		}
     }
 }
