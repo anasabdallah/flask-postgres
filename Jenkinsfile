@@ -28,10 +28,12 @@ pipeline {
     }
 		stage('deploy') {
 			steps {
-				sh """
-       		helm delete --purge flask-release && \
-       		helm install kubernetes/ --name flask-release
-       	"""
+        script {
+          try {
+            sh "helm list"
+          }
+          catch(all) {}   
+        }
 			}
 		}
   }
