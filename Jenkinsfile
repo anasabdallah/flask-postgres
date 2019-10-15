@@ -26,6 +26,14 @@ pipeline {
 				}
       }
     }
+		stage('deploy') {
+			steps {
+				sh """
+       		helm delete --purge flask-release && \
+       		helm install kubernetes/ --name flask-release
+       	"""
+			}
+		}
   }
   post { 
     always { 
