@@ -5,9 +5,9 @@ node {
   }
   stage('prebuild') {
     sh "git clone https://github.com/anasabdallah/flask-postgres.git && mv flask-postgres/* ./ && rm -rf flask-postgres"
-    withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkins')]) {
+    withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
       sh """
-         gcloud auth activate-service-account --key-file $jenkins && \
+         gcloud auth activate-service-account --key-file $jenkinsFlask && \
          gcloud config set compute/zone us-east1-b && \
          gcloud container clusters get-credentials flask-cluster
          """
