@@ -1,5 +1,4 @@
 node {
-  when { branch 'master' }
   def version = '0.0.1'
   stage('clean') {
     cleanWs()
@@ -22,6 +21,7 @@ node {
     }
   }
   stage('deploy') {
+    when { branch 'master' }
     sh """
        helm delete --purge flask-release && \
        sleep 30 && \
