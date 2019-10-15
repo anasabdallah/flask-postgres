@@ -1,15 +1,16 @@
 pipeline {
-    agent any 
-    stages {
-        stage('clean') {
-            steps {
+  agent any 
+  stages {
+    stage('clean') {
+      steps {
+        sh 'ls -la'
 				cleanWs()
-            }
+      }
     }
-	stage('prebuild') {
+	  stage('prebuild') {
 			steps {
 				sh 'ls -la'
 			}
 		}
-    }
+  }
 }
