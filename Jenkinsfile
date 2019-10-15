@@ -1,4 +1,5 @@
 node {
+  when { branch 'master' }
   def version = '0.0.1'
   stage('clean') {
     cleanWs()
