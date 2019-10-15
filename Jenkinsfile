@@ -1,4 +1,7 @@
 pipeline {
+	environment {
+    version = "0.0.1"
+  }
   agent any
   stages {
 	  stage('prebuild') {
@@ -15,18 +18,12 @@ pipeline {
 			}
 		}
     stage('build') {
-      agent {
-        docker {
-          image 'anasabdullah/python-app:0.0.1'
-          label 'anasabdullah/python-app:0.0.1'
-          registryUrl 'https://index.docker.io/v1/'
-          registryCredentialsId 'dockerhub'
-        }
-      } 
       steps {
-	      sh """
-          docker build -t anasabdullah/python-app:0.0.1 .
-        """
+				script {
+					docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+      			def app = docker.build("anasabdullah/python-app:${version}", '.').push()
+    			}
+				}
       }
     }
   }
