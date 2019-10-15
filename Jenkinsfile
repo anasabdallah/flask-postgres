@@ -1,5 +1,6 @@
 pipeline {
-  agent any 
+  agent any
+  def version = '0.0.1'
   stages {
 	  stage('prebuild') {
 			steps {
@@ -14,6 +15,13 @@ pipeline {
         }
 			}
 		}
+    stage('build') {
+      steps {
+        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+          def app = docker.build("anasabdullah/python-app:${version}", '.').push()
+        }
+      }
+    }
   }
   post { 
     always { 
