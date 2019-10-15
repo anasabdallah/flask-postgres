@@ -22,6 +22,8 @@ node {
   }
   stage('deploy') {
     sh """
+       helm delete --purge famous-billygoat && \
+       sleep 10 && \
        helm install kubernetes/ --name flask-release
        """
   }
