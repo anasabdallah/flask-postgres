@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
         - image: {{.Values.PYTHON_IMAGE}}
+          imagePullPollicy: Always
           name: python
           ports:
             - containerPort: {{.Values.PYTHON_CONTAINER_PORT}}
