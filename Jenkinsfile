@@ -6,7 +6,7 @@ pipeline {
   stages {
 	  stage('prebuild') {
 			steps {
-        sh "echo ${version}"
+        sh "echo ${env.GIT_COMMIT}"
 				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
           sh """
             gcloud auth activate-service-account --key-file $jenkinsFlask && \
