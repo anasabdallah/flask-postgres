@@ -34,7 +34,6 @@ pipeline {
           try {
             sh "helm upgrade flask-release kubernetes/ --reuse-values --set-string PYTHON_IMAGE=anasabdullah/python-app:${VERSION}"
             String DEPLOYMENT_STATUS = sh(returnStdout: true, script: "helm status flask-release | grep STATUS: | awk '{split(\$0,a,\" \"); print a[2]}'")
-            echo DEPLOYMENT_STATUS
             String REQUIRED_STATUS = "DEPLOYED"
             if ( DEPLOYMENT_STATUS == REQUIRED_STATUS ) { sh "exit 1" }
             echo "service deployed successfully ..."
@@ -42,7 +41,7 @@ pipeline {
           }
           catch(all) {
             echo "deployment failed, rolling back .."
-            // sh "helm rollback flask-release 0"
+            sh "helm rollback flask-release 0"
             currentBuild.result = 'FAILURE'
           }
         }
