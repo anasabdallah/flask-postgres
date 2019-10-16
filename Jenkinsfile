@@ -36,7 +36,7 @@ pipeline {
             String DEPLOYMENT_STATUS = sh(returnStdout: true, script: "helm status flask-release | grep STATUS: | awk '{split(\$0,a,\" \"); print a[2]}'")
             echo DEPLOYMENT_STATUS
             String REQUIRED_STATUS = "DEPLOYED"
-            if ( DEPLOYMENT_STATUS != REQUIRED_STATUS ) { sh "exit 1" }
+            if ( DEPLOYMENT_STATUS == REQUIRED_STATUS ) { sh "exit 1" }
             echo "service deployed successfully ..."
             currentBuild.result = 'SUCCESS'
           }
