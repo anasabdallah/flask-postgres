@@ -1,13 +1,14 @@
 pipeline {
 	environment {
-    version = ""
+    VERSION = ""
+    DEPLOYMENT_STATUS = ""
   }
   agent any
   stages {
 	  stage('prebuild') {
 			steps {
         script {
-          version = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+          VERSION = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
         }
 				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
           sh """
@@ -23,7 +24,7 @@ pipeline {
       steps {
 				script {
 					docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-      			def app = docker.build("anasabdullah/python-app:${version}", '.').push()
+      			def app = docker.build("anasabdullah/python-app:${VERSION}", '.').push()
     			}
 				}
       }
@@ -32,10 +33,9 @@ pipeline {
 			steps {
         script {
           try {
-            sh "helm upgrade flask-release kubernetes/ --reuse-values --set-string PYTHON_IMAGE=anasabdullah/python-app:${version}"
+            sh "helm upgrade flask-release kubernetes/ --reuse-values --set-string PYTHON_IMAGE=anasabdullah/python-app:${VERSION}"
             DEPLOYMENT_STATUS = sh(returnStdout: true, script: "helm status flask-release | grep STATUS: | awk '{split(\$0,a,\" \"); print a[2]}'")
-            echo "${DEPLOYMENT_STATUS}"
-            sh "if [ \"${DEPLOYMENT_STATUS}\" != \"DEPLOYED\" ]; then exit 1; fi"
+            if ( DEPLOYMENT_STATUS != "DEPLOYED" ) { sh "exit 1" }
             echo "service deployed successfully ..."
           }
           catch(all) {
