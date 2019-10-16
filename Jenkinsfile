@@ -6,7 +6,6 @@ pipeline {
   stages {
 	  stage('prebuild') {
 			steps {
-        version = ${env.GIT_COMMIT}
         sh "echo ${version}"
 				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
           sh """
