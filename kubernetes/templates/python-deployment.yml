@@ -5,7 +5,7 @@ metadata:
   labels:
     app: python
 spec:
-  replicas: 1
+  replicas: {{.Values.SCALE}}
   selector:
     matchLabels:
       app: python
