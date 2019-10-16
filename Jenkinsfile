@@ -33,10 +33,7 @@ pipeline {
         script {
           try {
             sh "helm upgrade flask-release kubernetes/ --reuse-values --set-string PYTHON_IMAGE=anasabdullah/python-app:${version}"
-            sh """
-              DEPLOYMENT_STATUS=$(helm status flask-release | grep STATUS | awk '{split($0,a," "); print a[2]')
-              echo $DEPLOYMENT_STATUS
-            """
+            sh "DEPLOYMENT_STATUS=$(helm status flask-release | grep STATUS | awk '{split($0,a," "); print a[2]') && echo $DEPLOYMENT_STATUS"
           }
           catch(all) {
             sh "echo 'deployment failed'"
