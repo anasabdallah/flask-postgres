@@ -36,7 +36,7 @@ pipeline {
             sh "helm upgrade flask-release kubernetes/ --reuse-values --set-string PYTHON_IMAGE=anasabdullah/python-app:${VERSION}"
             DEPLOYMENT_STATUS = sh(returnStdout: true, script: "helm status flask-release | grep STATUS: | awk '{split(\$0,a,\" \"); print a[2]}'")
             echo DEPLOYMENT_STATUS
-            if ( sh "echo ${DEPLOYMENT_STATUS}" == "DEPLOYED" ) { sh "exit 1" }
+            if ( sh(returnStdout: true, script: "echo ${DEPLOYMENT_STATUS}") != "DEPLOYED") { sh "exit 1" }
             echo "service deployed successfully ..."
             currentBuild.result = 'SUCCESS'
           }
