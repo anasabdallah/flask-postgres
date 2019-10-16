@@ -40,6 +40,7 @@ pipeline {
           }
           catch(all) {
             echo "deployment failed"
+            currentBuild.result = 'FAILURE'
           }
         }
 			}
