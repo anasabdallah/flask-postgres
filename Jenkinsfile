@@ -6,6 +6,9 @@ pipeline {
   stages {
 	  stage('prebuild') {
 			steps {
+        script {
+          version = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+        }
         version = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
           sh """
