@@ -6,13 +6,16 @@ pipeline {
   stages {
 	  stage('prebuild') {
 			steps {
-        sh "echo ${env.GIT_COMMIT}"
+        script {
+          version = ${env.GIT_COMMIT}
+        }
+        sh "echo ${version}"
 				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
           sh """
             gcloud auth activate-service-account --key-file $jenkinsFlask && \
             gcloud config set compute/zone us-east1-b && \
             gcloud config set project python-app-255507 && \
-            gcloud container clusters get-credentials flask-cluster && \
+            gcloud container clusters get-credentials flask-cluster
           """
         }
 			}
