@@ -9,7 +9,6 @@ pipeline {
         script {
           version = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
         }
-        sh "echo ${version}"
 				withCredentials([file(credentialsId: 'jenkins-service-account-python-app', variable: 'jenkinsFlask')]) {
           sh """
             gcloud auth activate-service-account --key-file $jenkinsFlask && \
@@ -33,7 +32,7 @@ pipeline {
 			steps {
         script {
           try {
-            sh "helm list"
+            sh "helm upgrade flask-release kubernetes/ --reuse-values --set-string PYTHON_IMAGE=anasabdullah/python-app:${version}"
           }
           catch(all) {
             sh "echo 'deployment failed'"
