@@ -49,7 +49,8 @@ pipeline {
 		}
   }
   post { 
-    always { 
+    always {
+      sh 'docker image prune -a --force --filter "until=48h"'
       cleanWs()
     }
   }
